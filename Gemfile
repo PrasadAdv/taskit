@@ -69,3 +69,5 @@ end
 gem "shakapacker", "= 8.0"
 
 gem "react-rails", "~> 3.2"
+
+gem "byebug", "~> 11.1"
