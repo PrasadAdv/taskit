@@ -2,6 +2,8 @@ class TasksController < ApplicationController
   protect_from_forgery
   before_action :fetch_task, only: %i[ show update destroy ]
 
+  def display
+  end
   # GET /tasks
   def index
     tasks = Task.all

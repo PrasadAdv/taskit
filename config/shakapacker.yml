@@ -31,7 +31,7 @@ default: &default
 
   # Additional paths webpack should look up modules
   # ['app/assets', 'engine/foo/app/assets']
-  additional_paths: []
+  additional_paths: ['app/assets']
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
@@ -70,7 +70,7 @@ development:
     port: 3035
     # Hot Module Replacement updates modules while the application is running without a full reload
     # Used instead of the `hot` key in https://webpack.js.org/configuration/dev-server/#devserverhot
-    hmr: false
+    hmr: true
     # If HMR is on, CSS will by inlined by delivering it as part of the script payload via style-loader. Be sure
     # that you add style-loader to your project dependencies.
     #
