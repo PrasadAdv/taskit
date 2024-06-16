@@ -11,6 +11,7 @@ export const RequestProvider = ({ children }) => {
   const [request, setRequest] = useState({
     requestFor: "New",
     isRequested: false,
+    isSucceeded: false,
   });
 
   const sendRequest = (value) => {

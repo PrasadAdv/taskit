@@ -1,10 +1,16 @@
 import HttpPromise from "../../common/http_promise";
 
-const CreateTask = (title, description, status) => {
+const CreateTask = (data) => {
   return HttpPromise({
     method: "POST",
     url: "/tasks",
-    params: { title: title, description: description, status: status },
+    params: {
+      task: {
+        title: data.title,
+        description: data.description,
+        status: data.status,
+      },
+    },
   });
 };
 

@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import TaskTable from "../permissions/components/task_table";
+import TaskTable from "./task_table";
 
 export default function FilterTabs() {
   const [value, setValue] = React.useState("1");
@@ -28,13 +28,13 @@ export default function FilterTabs() {
           <TaskTable />
         </TabPanel>
         <TabPanel value="2">
-          <TaskTable filter={{ status: "To do" }} />
+          <TaskTable taskStatus="To do" />
         </TabPanel>
         <TabPanel value="3">
-          <TaskTable filter={{ status: "In progress" }} />
+          <TaskTable taskStatus="In progress" />
         </TabPanel>
         <TabPanel value="4">
-          <TaskTable filter={{ status: "Done" }} />
+          <TaskTable taskStatus="Done" />
         </TabPanel>
       </TabContext>
     </Box>

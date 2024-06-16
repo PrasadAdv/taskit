@@ -1,10 +1,16 @@
 import HttpPromise from "../../common/http_promise";
 
-const UpdateTask = (id, title, description, status) => {
+const UpdateTask = (data) => {
   return HttpPromise({
     method: "PUT",
-    url: "/tasks/:id",
-    params: { id: id, title: title, description: description, status: status },
+    url: `/tasks/${data.id}`,
+    params: {
+      task: {
+        title: data.title,
+        description: data.description,
+        status: data.status,
+      },
+    },
   });
 };
 

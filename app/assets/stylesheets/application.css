@@ -69,3 +69,11 @@
 .pagination {
   background-color: #e8e9ec !important;
 }
+
+.banner {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: #cce1f6;
+  border-radius: 2rem;
+  text-align: center;
+}

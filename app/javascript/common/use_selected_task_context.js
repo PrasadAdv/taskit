@@ -8,6 +8,7 @@ export const useTaskContext = () => useContext(TaskContext);
 // Context provider component
 export const TaskContextProvider = ({ children }) => {
   const [taskContext, setTaskContext] = useState({
+    id: "",
     title: "",
     status: "To do",
     description: "",

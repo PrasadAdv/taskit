@@ -3,23 +3,23 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 export default function Notification(props) {
-  const { open, handleClose } = props;
+  const { open, handleClose, message } = props;
 
   return (
     <div>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={open}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
       >
         <Alert
           onClose={handleClose}
-          severity="success"
+          severity={message.status}
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Task successfully deleted!
+          {message.message}
         </Alert>
       </Snackbar>
     </div>

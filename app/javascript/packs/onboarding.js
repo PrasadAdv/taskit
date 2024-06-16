@@ -1,9 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import HelloWorld from "../components/HelloWorld";
+import TaskIt from "../components/TaskIt";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const rootElement = document.body.appendChild(document.createElement('div'));
+  const rootElement = document.body.appendChild(document.createElement("div"));
   const root = createRoot(rootElement);
-  root.render(<HelloWorld />);
+  root.render(<TaskIt />);
 });

@@ -1,33 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-import Notification from "./notification";
 
-export default function AlertDialog(props) {
-  const { value, handleDelete, handleCancel } = props;
-  const [isDeleted, setIsDeleted] = useState(false);
+export default function AlertDialogue(props) {
+  const { open, handleAlertDialogue, handleCancel, handleDelete } = props;
 
   const handleNo = () => {
-    handleDelete(false);
+    handleAlertDialogue(false);
   };
 
   const handleYes = () => {
-    setIsDeleted(true);
-    handleDelete(false);
+    handleDelete();
+    handleAlertDialogue(false);
     handleCancel();
-    console.log("deletes the data");
-  };
-
-  const handleClose = () => {
-    setIsDeleted(false);
   };
 
   return (
-    <>
+    <React.Fragment>
       <Dialog
-        open={value}
+        open={open}
         onClose={handleNo}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -40,7 +33,6 @@ export default function AlertDialog(props) {
           <Button onClick={handleYes}>Yes</Button>
         </DialogActions>
       </Dialog>
-      <Notification open={isDeleted} handleClose={handleClose} />
-    </>
+    </React.Fragment>
   );
 }

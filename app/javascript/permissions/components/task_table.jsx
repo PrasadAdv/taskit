@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -14,14 +14,17 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
-import { TablePagination, Tooltip } from "@mui/material";
+import {
+  CircularProgress,
+  Container,
+  TablePagination,
+  Tooltip,
+} from "@mui/material";
 import StatusSelector from "./task_status_selector";
 import { useRequestToggle } from "../../common/show_form_context";
 import { useTaskContext } from "../../common/use_selected_task_context";
-
-function createData(title, status, description) {
-  return { title, status, description };
-}
+import GetAllTasks from "../apis/get_all_tasks";
+import { isEmpty } from "lodash";
 
 function Row(props) {
   const { row } = props;
@@ -39,7 +42,7 @@ function Row(props) {
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>{row.title}</TableCell>
         <TableCell className="table-row">
-          <StatusSelector value={{ title: row.title, status: row.status }} />
+          <StatusSelector data={row} />
         </TableCell>
         <TableCell className="table-row">
           <Tooltip title="Description" arrow>
@@ -80,22 +83,28 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
+    title: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
   }).isRequired,
 };
 
-const rows = [
-  createData("Frozen yoghurt", "In progress", "Description1"),
-  createData("Ice cream sandwich", "In progress", "Description2"),
-  createData("Eclair", "To do", "Description3"),
-  createData("Cupcake", "To do", "Description4"),
-  createData("Gingerbread", "Done", "Description5"),
-];
+function Banner(props) {
+  return (
+    <Container className="banner">
+      {props.isLoading ? <CircularProgress /> : <h1>No Tasks Found</h1>}
+    </Container>
+  );
+}
 
 export default function TaskTable(props) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { taskStatus } = props;
+  const { request } = useRequestToggle();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [data, setData] = useState([]);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [isLoading, setIsloading] = useState(true);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -106,17 +115,37 @@ export default function TaskTable(props) {
     setPage(0);
   };
 
-  const filteredData = rows.filter((row) =>
-    props.filter?.status ? row.status === props.filter?.status : true
+  const filteredData = data.filter((row) =>
+    taskStatus ? row.status === taskStatus : true
   );
 
-  const paginatedData = filteredData.slice(
+  const sortedData = [...filteredData].sort((a, b) => b.id - a.id);
+
+  const paginatedData = sortedData.slice(
     page * rowsPerPage,
     (page + 1) * rowsPerPage
   );
 
-  return (
-    <>
+  useEffect(() => {
+    if (request.isSucceeded || initialLoad) {
+      setInitialLoad(false);
+      setIsloading(true);
+      GetAllTasks()
+        .then((response) => {
+          setData(response.data);
+          sendRequest({ ...request, isSucceeded: false });
+          setIsloading(false);
+        })
+        .catch(() => {
+          setIsloading(false);
+        });
+    }
+  }, [request.isSucceeded, initialLoad]);
+
+  return isEmpty(filteredData) ? (
+    <Banner isLoading={isLoading} />
+  ) : (
+    <React.Fragment>
       <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -132,7 +161,7 @@ export default function TaskTable(props) {
           </TableHead>
           <TableBody>
             {paginatedData.map((row) => (
-              <Row key={row.title} row={row} />
+              <Row key={row.id} row={row} />
             ))}
           </TableBody>
         </Table>
@@ -147,6 +176,6 @@ export default function TaskTable(props) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </>
+    </React.Fragment>
   );
 }

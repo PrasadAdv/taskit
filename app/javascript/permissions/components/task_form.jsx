@@ -3,16 +3,24 @@ import { Button, Container, MenuItem, Stack, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useRequestToggle } from "../../common/show_form_context";
 import { useTaskContext } from "../../common/use_selected_task_context";
-import AlertDialog from "./alert_dialogue_box";
+import Notification from "./notification";
+import CreateTask from "../apis/create_task";
+import UpdateTask from "../apis/update_task";
+import DeleteTask from "../apis/delete_task";
+import AlertDialogue from "./alert_dialogue_box";
+import { TASK_STATUSES } from "../../common/constants";
 
-const options = ["To do", "In progress", "Done"];
-const defaultData = { title: "", status: "To do", description: "" };
+const defaultData = { id: "", title: "", status: "To do", description: "" };
 
 const TaskForm = () => {
   const { request, sendRequest } = useRequestToggle();
   const { taskContext } = useTaskContext();
   const [formData, setFormData] = useState(defaultData);
-  const [isDelete, setIsDelete] = useState(false);
+  const [showAlertDialogue, setShowAlertDialogue] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [message, setMessage] = useState({ status: "", message: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +32,7 @@ const TaskForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    setIsFormSubmitted(true);
   };
 
   const clearForm = () => {
@@ -33,11 +41,19 @@ const TaskForm = () => {
 
   const handleCancel = () => {
     clearForm();
-    sendRequest({ requestFor: "New", isRequested: false });
+    sendRequest({ requestFor: "New", isRequested: false, isSucceeded: false });
   };
 
-  const handleDelete = (value) => {
-    setIsDelete(value);
+  const handleDelete = () => {
+    setConfirmDelete(true);
+  };
+
+  const handleAlertDialogue = (value) => {
+    setShowAlertDialogue(value);
+  };
+
+  const closeNotification = () => {
+    setShowNotification(false);
   };
 
   useEffect(() => {
@@ -46,8 +62,72 @@ const TaskForm = () => {
       : setFormData(defaultData);
   }, [taskContext, request.requestFor]);
 
+  useEffect(() => {
+    if (isFormSubmitted) {
+      sendRequest({ ...request, isSucceeded: false });
+      if (request.requestFor === "New") {
+        CreateTask(formData)
+          .then(() => {
+            setShowNotification(true);
+            setMessage({
+              status: "success",
+              message: "Task successfully saved!",
+            });
+            sendRequest({ ...request, isSucceeded: true });
+          })
+          .catch(() => {
+            setShowNotification(true);
+            setMessage({
+              status: "error",
+              message: "Failed to create the task!",
+            });
+          });
+      } else {
+        UpdateTask(formData)
+          .then(() => {
+            setShowNotification(true);
+            setMessage({
+              status: "success",
+              message: "Task successfully saved!",
+            });
+            sendRequest({ ...request, isSucceeded: true });
+          })
+          .catch(() => {
+            setShowNotification(true);
+            setMessage({
+              status: "error",
+              message: "Failed to update the task!",
+            });
+          });
+      }
+      setIsFormSubmitted(false);
+    }
+  }, [isFormSubmitted]);
+
+  useEffect(() => {
+    if (confirmDelete) {
+      DeleteTask(taskContext.id)
+        .then(() => {
+          setShowNotification(true);
+          setMessage({
+            status: "success",
+            message: "Task successfully deleted!",
+          });
+          sendRequest({ ...request, isSucceeded: true });
+        })
+        .catch((e) => {
+          setShowNotification(true);
+          setMessage({
+            status: "error",
+            message: "Failed to delete the task!",
+          });
+        });
+      setConfirmDelete(false);
+    }
+  }, [confirmDelete]);
+
   return (
-    <>
+    <React.Fragment>
       {request.isRequested && (
         <Container className="form">
           <form onSubmit={handleSubmit}>
@@ -65,7 +145,7 @@ const TaskForm = () => {
                     color="error"
                     type="button"
                     variant="contained"
-                    onClick={() => handleDelete(true)}
+                    onClick={() => handleAlertDialogue(true)}
                   >
                     Delete
                   </Button>
@@ -101,7 +181,7 @@ const TaskForm = () => {
                   value={formData.status}
                   onChange={handleChange}
                 >
-                  {options.map((option) => (
+                  {TASK_STATUSES.map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
                     </MenuItem>
@@ -113,7 +193,7 @@ const TaskForm = () => {
                 id="outlined-multiline-static"
                 label="Description"
                 name="description"
-                value={formData.description}
+                value={formData.description || ""}
                 onChange={handleChange}
                 multiline
                 rows={4}
@@ -125,12 +205,18 @@ const TaskForm = () => {
           </form>
         </Container>
       )}
-      <AlertDialog
-        value={isDelete}
-        handleDelete={handleDelete}
+      <AlertDialogue
+        open={showAlertDialogue}
+        handleAlertDialogue={handleAlertDialogue}
         handleCancel={handleCancel}
+        handleDelete={handleDelete}
       />
-    </>
+      <Notification
+        open={showNotification}
+        handleClose={closeNotification}
+        message={message}
+      />
+    </React.Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -7,8 +7,11 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
+import UpdateTask from "../apis/update_task";
+import Notification from "./notification";
+import { useRequestToggle } from "../../common/show_form_context";
+import { TASK_STATUSES } from "../../common/constants";
 
-const options = ["To do", "In progress", "Done"];
 const statusStyle = [
   "status-menu to-do",
   "status-menu in-progress",
@@ -16,17 +19,39 @@ const statusStyle = [
 ];
 
 export default function StatusSelector(props) {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(
-    options.indexOf(props.value.status)
+  const { request, sendRequest } = useRequestToggle();
+  const { data } = props;
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
+  const [selectedIndex, setSelectedIndex] = useState(
+    TASK_STATUSES.indexOf(data.status)
   );
+  const [message, setMessage] = useState({ status: "", message: "" });
+  const [showNotification, setShowNotification] = useState(false);
+
+  const closeNotification = () => {
+    setShowNotification(false);
+  };
 
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
-    console.info(`You clickedff  ${options[index]}`);
-    console.info(`You clicf  ${props.value.title}`);
-
+    sendRequest({ ...request, isSucceeded: false });
+    UpdateTask({ ...data, status: TASK_STATUSES[index] })
+      .then(() => {
+        setShowNotification(true);
+        setMessage({
+          status: "success",
+          message: "Status successfully updated!",
+        });
+        sendRequest({ ...request, isSucceeded: true });
+      })
+      .catch(() => {
+        setShowNotification(true);
+        setMessage({
+          status: "error",
+          message: "Failed to update the status!",
+        });
+      });
     setOpen(false);
   };
 
@@ -58,7 +83,7 @@ export default function StatusSelector(props) {
           aria-haspopup="menu"
           onClick={handleToggle}
         >
-          {options[selectedIndex]}
+          {TASK_STATUSES[selectedIndex]}
         </Button>
       </ButtonGroup>
       <Popper
@@ -80,7 +105,7 @@ export default function StatusSelector(props) {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList id="split-button-menu" autoFocusItem>
-                  {options.map((option, index) => (
+                  {TASK_STATUSES.map((option, index) => (
                     <MenuItem
                       key={option}
                       selected={index === selectedIndex}
@@ -95,6 +120,11 @@ export default function StatusSelector(props) {
           </Grow>
         )}
       </Popper>
+      <Notification
+        open={showNotification}
+        handleClose={closeNotification}
+        message={message}
+      />
     </React.Fragment>
   );
 }

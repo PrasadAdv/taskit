@@ -24,7 +24,7 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   def update
-    @task.update(task_params)
+    @task.update!(task_params)
     render json: @task, status: :ok, location: @task
   end
 
