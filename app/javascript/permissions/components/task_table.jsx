@@ -90,11 +90,26 @@ Row.propTypes = {
 };
 
 function Banner(props) {
-  return (
-    <Container className="banner">
-      {props.isLoading ? <CircularProgress /> : <h1>No Tasks Found</h1>}
-    </Container>
-  );
+  switch (props.apiCallStatus) {
+    case "loading":
+      return (
+        <Container className="banner-success">
+          <CircularProgress />
+        </Container>
+      );
+    case "error":
+      return (
+        <Container className="banner-error">
+          <h2>Error occured while fetching data</h2>
+        </Container>
+      );
+    default:
+      return (
+        <Container className="banner-success">
+          <h2>No tasks Found</h2>
+        </Container>
+      );
+  }
 }
 
 export default function TaskTable(props) {
@@ -104,7 +119,7 @@ export default function TaskTable(props) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [data, setData] = useState([]);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [isLoading, setIsloading] = useState(true);
+  const [apiCallStatus, setApiCallStatus] = useState("loading");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -129,21 +144,20 @@ export default function TaskTable(props) {
   useEffect(() => {
     if (request.isSucceeded || initialLoad) {
       setInitialLoad(false);
-      setIsloading(true);
+      setApiCallStatus("loading");
       GetAllTasks()
         .then((response) => {
           setData(response.data);
-          sendRequest({ ...request, isSucceeded: false });
-          setIsloading(false);
+          setApiCallStatus("done");
         })
-        .catch(() => {
-          setIsloading(false);
+        .catch((e) => {
+          setApiCallStatus("error");
         });
     }
   }, [request.isSucceeded, initialLoad]);
 
   return isEmpty(filteredData) ? (
-    <Banner isLoading={isLoading} />
+    <Banner apiCallStatus={apiCallStatus} />
   ) : (
     <React.Fragment>
       <TableContainer component={Paper} sx={{ maxHeight: 440 }}>

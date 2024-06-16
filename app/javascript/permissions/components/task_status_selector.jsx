@@ -75,7 +75,7 @@ export default function StatusSelector(props) {
         aria-label="Button group with a nested menu"
       >
         <Button
-          className={statusStyle[selectedIndex]}
+          className={statusStyle[TASK_STATUSES.indexOf(data.status)]}
           size="small"
           aria-controls={open ? "split-button-menu" : undefined}
           aria-expanded={open ? "true" : undefined}
@@ -83,7 +83,7 @@ export default function StatusSelector(props) {
           aria-haspopup="menu"
           onClick={handleToggle}
         >
-          {TASK_STATUSES[selectedIndex]}
+          {data.status}
         </Button>
       </ButtonGroup>
       <Popper

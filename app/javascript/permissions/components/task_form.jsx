@@ -161,6 +161,7 @@ const TaskForm = () => {
               <Stack direction="row" spacing={2}>
                 <TextField
                   required
+                  helperText="Title length should be 1-40 characters"
                   className="title-field"
                   id="outlined-required"
                   label="Title"
