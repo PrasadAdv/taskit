@@ -1,5 +1,6 @@
 import HttpPromise from "../../common/http_promise";
 
+// calls Backend API: update
 const UpdateTask = (data) => {
   return HttpPromise({
     method: "PUT",

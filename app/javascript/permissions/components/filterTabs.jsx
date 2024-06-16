@@ -6,9 +6,11 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TaskTable from "./task_table";
 
+// Shows Tasks with different statuses in different tabs
 export default function FilterTabs() {
   const [value, setValue] = React.useState("1");
 
+  // handles tab selection
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

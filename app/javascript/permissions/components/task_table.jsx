@@ -26,12 +26,15 @@ import { useTaskContext } from "../../common/use_selected_task_context";
 import GetAllTasks from "../apis/get_all_tasks";
 import { isEmpty } from "lodash";
 
+// Returns a row in the table
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
   const { sendRequest } = useRequestToggle();
   const { sendTaskContext } = useTaskContext();
 
+  // Sends request to show form for Update action and
+  // sends selected task context for form pre-population
   const handleEdit = (data) => {
     sendRequest({ requestFor: "Update", isRequested: true });
     sendTaskContext(data);
@@ -71,7 +74,7 @@ function Row(props) {
             <Box sx={{ margin: 1 }}>
               <Typography className="description">Description:</Typography>
               <Paper className="description-content" elevation={0}>
-                {row.description}
+                <div style={{ whiteSpace: "pre-wrap" }}> {row.description}</div>
               </Paper>
             </Box>
           </Collapse>
@@ -89,11 +92,12 @@ Row.propTypes = {
   }).isRequired,
 };
 
+// Displays 'loader'/ 'Error page'/ 'No tasks found page' based on API call response
 function Banner(props) {
   switch (props.apiCallStatus) {
     case "loading":
       return (
-        <Container className="banner-success">
+        <Container className="banner">
           <CircularProgress />
         </Container>
       );
@@ -105,13 +109,14 @@ function Banner(props) {
       );
     default:
       return (
-        <Container className="banner-success">
+        <Container className="banner">
           <h2>No tasks Found</h2>
         </Container>
       );
   }
 }
 
+// Table to display Tasks
 export default function TaskTable(props) {
   const { taskStatus } = props;
   const { request } = useRequestToggle();
@@ -121,26 +126,34 @@ export default function TaskTable(props) {
   const [initialLoad, setInitialLoad] = useState(true);
   const [apiCallStatus, setApiCallStatus] = useState("loading");
 
+  // handles page change in table
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  // handles per page change in table
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
+  // filters data as per task status
   const filteredData = data.filter((row) =>
     taskStatus ? row.status === taskStatus : true
   );
 
+  // sorts data as per recent creation
   const sortedData = [...filteredData].sort((a, b) => b.id - a.id);
 
+  // paginates the data
   const paginatedData = sortedData.slice(
     page * rowsPerPage,
     (page + 1) * rowsPerPage
   );
 
+  // Handles API call for Index request
+  // Fetches all data when initially loaded or any data change happens
+  // like New, Update or Delete
   useEffect(() => {
     if (request.isSucceeded || initialLoad) {
       setInitialLoad(false);

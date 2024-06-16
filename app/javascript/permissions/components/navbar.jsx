@@ -7,6 +7,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import { useRequestToggle } from "../../common/show_form_context";
 
+// Navigation bar for the App
 const NavBar = () => {
   const { sendRequest } = useRequestToggle();
   return (

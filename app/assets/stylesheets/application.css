@@ -14,12 +14,29 @@
  *= require_self
  */
 
+/* App customization start */
 .app {
   margin-top: 5.5rem;
   scroll-margin-top: 5.5rem;
   overflow-y: auto;
 }
+/* End */
 
+/* Form customization start */
+.form {
+  margin-left: 0rem !important;
+}
+
+.status-field {
+  width: calc(100% / 8) !important;
+}
+
+.title-field {
+  width: calc(100% / 3) !important;
+}
+/* End */
+
+/* Table customization start */
 .table-row-color {
   background-color: #297ccf !important;
 }
@@ -54,23 +71,13 @@
   background-color: #0ba10b !important;
 }
 
-.form {
-  margin-left: 0rem !important;
-}
-
-.status-field {
-  width: calc(100% / 8) !important;
-}
-
-.title-field {
-  width: calc(100% / 3) !important;
-}
-
 .pagination {
   background-color: #e8e9ec !important;
 }
+/* End */
 
-.banner-success {
+/* Miscellaneous UI coustomization */
+.banner {
   padding-top: 5rem;
   padding-bottom: 5rem;
   background-color: #cce1f6;
@@ -85,3 +92,4 @@
   border-radius: 2rem;
   text-align: center;
 }
+/* End */

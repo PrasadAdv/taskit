@@ -12,6 +12,7 @@ import { TASK_STATUSES } from "../../common/constants";
 
 const defaultData = { id: "", title: "", status: "To do", description: "" };
 
+// Form for creating/updating tasks
 const TaskForm = () => {
   const { request, sendRequest } = useRequestToggle();
   const { taskContext } = useTaskContext();
@@ -22,6 +23,7 @@ const TaskForm = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [message, setMessage] = useState({ status: "", message: "" });
 
+  // sets form data while form fillup
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -30,38 +32,46 @@ const TaskForm = () => {
     });
   };
 
+  // handles form submit action
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsFormSubmitted(true);
   };
 
+  // Clears out the form
   const clearForm = () => {
     setFormData(defaultData);
   };
 
+  // Resets the form
   const handleCancel = () => {
     clearForm();
     sendRequest({ requestFor: "New", isRequested: false, isSucceeded: false });
   };
 
+  // Confirms task delete action
   const handleDelete = () => {
     setConfirmDelete(true);
   };
 
+  // Shows/hides alert dialogue box
   const handleAlertDialogue = (value) => {
     setShowAlertDialogue(value);
   };
 
+  // Shows/hides notification
   const closeNotification = () => {
     setShowNotification(false);
   };
 
+  // Populates data in the form based on the request (New/Update)
   useEffect(() => {
     request.requestFor === "Update"
       ? setFormData(taskContext)
       : setFormData(defaultData);
   }, [taskContext, request.requestFor]);
 
+  // handles API call for New/Update request
   useEffect(() => {
     if (isFormSubmitted) {
       sendRequest({ ...request, isSucceeded: false });
@@ -104,6 +114,7 @@ const TaskForm = () => {
     }
   }, [isFormSubmitted]);
 
+  // handles API call for Delete request
   useEffect(() => {
     if (confirmDelete) {
       DeleteTask(taskContext.id)
@@ -128,6 +139,8 @@ const TaskForm = () => {
 
   return (
     <React.Fragment>
+      {/* Show form only when requested */}
+
       {request.isRequested && (
         <Container className="form">
           <form onSubmit={handleSubmit}>

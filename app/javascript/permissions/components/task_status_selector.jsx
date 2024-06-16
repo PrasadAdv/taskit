@@ -18,6 +18,7 @@ const statusStyle = [
   "status-menu",
 ];
 
+// Task Status selector
 export default function StatusSelector(props) {
   const { request, sendRequest } = useRequestToggle();
   const { data } = props;
@@ -29,10 +30,12 @@ export default function StatusSelector(props) {
   const [message, setMessage] = useState({ status: "", message: "" });
   const [showNotification, setShowNotification] = useState(false);
 
+  // Shows/hides notification
   const closeNotification = () => {
     setShowNotification(false);
   };
 
+  // Sets selected status and calls update API
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
     sendRequest({ ...request, isSucceeded: false });
@@ -55,10 +58,12 @@ export default function StatusSelector(props) {
     setOpen(false);
   };
 
+  // Shows/hides selector on click of selector button
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
+  // Closes the selector when clickaway
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
@@ -69,6 +74,8 @@ export default function StatusSelector(props) {
 
   return (
     <React.Fragment>
+      {/* Options in selector acts as buttons */}
+
       <ButtonGroup
         variant="contained"
         ref={anchorRef}

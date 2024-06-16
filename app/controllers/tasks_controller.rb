@@ -2,8 +2,10 @@ class TasksController < ApplicationController
   protect_from_forgery
   before_action :fetch_task, only: %i[ show update destroy ]
 
+  # display app
   def display
   end
+
   # GET /tasks
   def index
     tasks = Task.all
@@ -35,7 +37,7 @@ class TasksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    # fetches a task from db
     def fetch_task
       @task = Task.find(params[:id])
     end

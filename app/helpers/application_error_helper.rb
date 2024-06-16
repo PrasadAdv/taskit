@@ -1,5 +1,6 @@
 # setup to handle different exceptions
 module ApplicationErrorHelper
+  # Error types
   STANDARD_400 = [ActionDispatch::Http::Parameters::ParseError]
   STANDARD_404 = [ActiveRecord::RecordNotFound, ActionController::RoutingError]
   STANDARD_422 = [
@@ -11,6 +12,7 @@ module ApplicationErrorHelper
     Mysql2::Error,
   ]
 
+  # renders standard error response
   def handle_standard_error(error)
     case error
     when *STANDARD_404
@@ -24,10 +26,12 @@ module ApplicationErrorHelper
     end
   end
 
+  # renders validation error response
   def handle_validation_error(error)
     render_json(error, :unprocessable_entity)
   end
 
+  # reusable function for rendering error response
   def render_json(error, status)
     render json: { Error: error.message }, status: status
   end

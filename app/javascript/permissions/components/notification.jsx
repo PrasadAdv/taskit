@@ -2,6 +2,7 @@ import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
+// Notification
 export default function Notification(props) {
   const { open, handleClose, message } = props;
 

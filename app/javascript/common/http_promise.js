@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Handles Frontend interactions with Backend APIs
 const HttpPromise = (requestDetails) => {
   axios.interceptors.response.use(function (response) {
     if (
