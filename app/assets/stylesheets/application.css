@@ -92,4 +92,8 @@
   border-radius: 2rem;
   text-align: center;
 }
+
+.navbar {
+  display: flex;
+}
 /* End */
