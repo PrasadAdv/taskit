@@ -28,7 +28,8 @@
 }
 
 .status-field {
-  width: calc(100% / 8) !important;
+  max-width: max-content !important;
+  min-width: fit-content !important;
 }
 
 .title-field {
