@@ -8,6 +8,7 @@ TaskIt is a simple task management tool that lets a user create and manage tasks
 - [Local setup](#local-setup)
   - [Pre requisites](#pre-requisites)
   - [Installation](#installation)
+  - [Run test suite](#run-test-suite)
 - [User guide](#user-guide)
 
 ### <a id="taskit-architecture">TaskIt Architecture</a>
@@ -43,6 +44,9 @@ TaskIt is a Full stack application which uses React for frontend, Ruby on Rails 
   ```
 
   6. The Application is running on http://127.0.0.1:3000/ . You are ready to explore.
+
+- #### <a id="run-test-suite">Run test suite</a>
+  To run test cases, run the command `bundle exec rake test`.
 
 ### <a id="user-guide">User guide</a>
 

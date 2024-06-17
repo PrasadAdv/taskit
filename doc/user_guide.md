@@ -19,7 +19,9 @@
    This will help you better focus and manage your tasks.
 9. In the table, you can easily manage the status of a task by clicking on status selector button
    under the Status column and selecting an appropriate option.
-10. I hope you find the tool quite handy.
+10. The table has pagination facility, that spreads your tasks across various pages.
+    You can change the per page size and go back and forth to next/previous pages to explore the data.
+11. I hope you find the tool quite handy.
 
 Note: You can watch the following video for reference.
 

@@ -19,7 +19,11 @@ export default function FilterTabs() {
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <TabList
+            onChange={handleChange}
+            aria-label="lab API tabs example"
+            variant="scrollable"
+          >
             <Tab label="All tasks" value="1" />
             <Tab label="Tasks to do" value="2" />
             <Tab label="Tasks in progress" value="3" />
