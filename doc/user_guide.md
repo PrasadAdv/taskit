@@ -25,4 +25,6 @@
 
 Note: You can watch the following video for reference.
 
+https://github.com/PrasadAdv/taskit/assets/93985825/f0abec71-6686-4191-b1ab-c6bc4e7b8fd1
+
 If you have it, TaskIt!
