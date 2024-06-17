@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import TaskTable from "./task_table";
+import TaskTable from "./taskTable";
 
 // Shows Tasks with different statuses in different tabs
 export default function FilterTabs() {

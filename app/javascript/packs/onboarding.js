@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import TaskIt from "../components/TaskIt";
+import TaskIt from "../components/taskIt";
 
 // Initializes the React application in which App is rendered
 document.addEventListener("DOMContentLoaded", () => {

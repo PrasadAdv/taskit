@@ -1,4 +1,4 @@
-import HttpPromise from "../../common/http_promise";
+import HttpPromise from "../../common/httpPromise";
 
 // calls Backend API: create
 const CreateTask = (data) => {

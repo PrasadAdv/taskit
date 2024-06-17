@@ -20,10 +20,10 @@ import {
   TablePagination,
   Tooltip,
 } from "@mui/material";
-import StatusSelector from "./task_status_selector";
-import { useRequestToggle } from "../../common/show_form_context";
-import { useTaskContext } from "../../common/use_selected_task_context";
-import GetAllTasks from "../apis/get_all_tasks";
+import StatusSelector from "./taskStatusSelector";
+import { useRequestToggle } from "../../common/showFormContext";
+import { useTaskContext } from "../../common/useSelectedTaskContext";
+import GetAllTasks from "../apis/getAllTasks";
 import { isEmpty } from "lodash";
 
 // Returns a row in the table
